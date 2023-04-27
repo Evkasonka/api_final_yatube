@@ -20,6 +20,7 @@ class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     permission_classes = (IsAuthorOrReadOnly,)
     pagination_class = LimitOffsetPagination
+    filterset_fields = ('author', 'group')
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -50,7 +51,7 @@ class FollowViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        return Follow.objects.filter(user_id=self.request.user.pk)
+        return Follow.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
